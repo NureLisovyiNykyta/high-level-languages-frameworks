@@ -1,30 +1,14 @@
 import FormTemplate from "./template";
-import api from "../../apiConfig";
+import { useAuth } from "../../authContext";
 
-const RegisterForm = ({ onBack, onSuccess }) => {
-  const handleRegister = async (data, setStatus) => {
-    try {
-      const response = await api.post("/register", data);
-      if (response.status === 201) {
-        setStatus({ message: "Admin added successfully!", type: "success" });
-        setTimeout(() => {
-          onSuccess();
-          onBack();
-        }, 1000);
-      }
-    } catch (error) {
-      setStatus({
-        message: error.response?.data?.message || "Failed to register admin.",
-        type: "error",
-      });
-    }
-  };
+export const RegisterForm = ({ onBack }) => {
+  const { register } = useAuth();
 
   return (
     <FormTemplate
       title="Join the community"
       buttonText="Register"
-      onSubmit={handleRegister}
+      onSubmit={register}
       fields={[
         {
           name: "name",
@@ -49,8 +33,8 @@ const RegisterForm = ({ onBack, onSuccess }) => {
         },
       ]}
       onBack={onBack}
+      className={"register-form"}
+      autoComplete="off"
     />
   );
 };
-
-export default RegisterForm;

@@ -11,6 +11,7 @@ const FormTemplate = ({
   buttonText,
   className,
   onBack,
+  additional,
 }) => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [showPassword, setShowPassword] = useState(false);
@@ -31,7 +32,7 @@ const FormTemplate = ({
     <div className={`form-template ${className}`}>
       <div className='header'>
         <div className='title'>
-          <IoArrowBackOutline className='icon' onClick={onBack} />
+          {onBack && <IoArrowBackOutline className='icon' onClick={onBack} />}
           {title}
         </div>
       </div>
@@ -43,6 +44,7 @@ const FormTemplate = ({
               placeholder={placeholder}
               type={name === "password" && showPassword ? 'text' : type}
               {...register(name, validation)}
+              autoComplete={name === "password" ? "new-password" : "off"}
             />
             {errors[name] && <p className='error'>{errors[name].message}</p>}
             {name === "password" && (
@@ -54,6 +56,11 @@ const FormTemplate = ({
         ))}
         <button type='submit'>{buttonText}</button>
       </form>
+      {additional && (
+        <div className="additional">
+          {additional}
+        </div>
+      )}
     </div>
   );
 };

@@ -4,6 +4,11 @@
   min-width: 400px;
   padding: 2rem;
   padding-top: 0.5rem;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);  
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .form-template .header {
@@ -14,11 +19,6 @@
   display: none;
 }
 
-.form-template .language-switcher {
-  width: fit-content;
-  place-self: flex-end;
-}
-
 .form-template .header .title {
   font-size: 1.5rem;
   width: 100%;
@@ -26,7 +26,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 1rem 0;  
+  margin: 1rem 0;
   position: relative;
 }
 
@@ -59,8 +59,9 @@
   visibility: visible;
   opacity: 1;
   height: auto;
-  margin: 1rem 0;
-  padding: 1rem;
+  margin: 0.5rem 0;
+  margin-top: 0;
+  padding: 1rem 0;
 }
 
 .form-template .status.error {
@@ -115,24 +116,41 @@
   user-select: none;
 }
 
-.form-template .form .additional {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 1rem 0;
+.form-template .form .form-group input:-webkit-autofill {
+  background-color: transparent !important;
+  color: #333 !important;
+  border: 1px solid #ccc;
+  transition: background-color 5000s ease-in-out 0s; 
+}
+
+.form-template .form .form-group input:-webkit-autofill::first-line {
+  font-size: 1.2rem;
   color: #333;
-  user-select: none;
 }
 
-.form-template .form .additional .forgot {
+/* Для інших браузерів */
+.form-template .form .form-group input:autofill {
+  background-color: transparent !important;
+  color: #333 !important;
+}
+
+.form-template .additional {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.form-template .additional button {
+  color: #5aa9fc;
   cursor: pointer;
-  color: rgb(92, 148, 254);
+  margin-left: 0.1rem;  
+  font-size: 1rem;
+  transition: .2s;
 }
 
-.login-form,
-.reset-password-form {
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.form-template .additional button:hover {
+  color: #0056b3;
 }

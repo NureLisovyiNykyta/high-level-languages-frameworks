@@ -30,11 +30,41 @@ export const AuthProvider = ({ children }) => {
     };
 
     checkAuthStatus();
-  }, [isAuthenticated]);
+  }, []);
 
-  const login = () => {
-    setIsAuthenticated(true);
-    navigate('/home');
+  const login = async (data, setStatus) => {
+    try {
+      const response = await api.post('/login', data);
+      if (response.status === 200) {
+        setStatus({ message: "Login successful! Redirecting.", type: "success" });
+        setTimeout(() => {
+          setIsAuthenticated(true);
+          navigate('/home');
+        }, 1000);
+      }
+    } catch (error) {
+      setStatus({
+        message: error.response?.data?.message || "Login failed. Please try again.",
+        type: "error",
+      });
+    }
+  };
+
+  const register = async (data, setStatus) => {
+    try {
+      const response = await api.post('/register', data);
+      if (response.status === 201) {
+        setStatus({ message: "Registration successful!", type: "success" });
+        setTimeout(() => {
+          navigate('/login');
+        }, 1000);
+      }
+    } catch (error) {
+      setStatus({
+        message: error.response?.data?.message || "Registration failed. Please try again.",
+        type: "error",
+      });
+    }
   };
 
   const logout = async () => {
@@ -50,7 +80,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userData, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, userData, login, register, logout }}>
       {!loading && children}
     </AuthContext.Provider>
   );
