@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const path = require('path');
 const userRoutes = require("./routes/user.routes");
 const videoRoutes = require("./routes/video.routes");
 const subscriptionRoutes = require("./routes/subscription.routes");

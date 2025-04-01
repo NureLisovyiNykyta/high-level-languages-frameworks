@@ -1,4 +1,4 @@
-const { Video } = require('../models');
+const Video = require('../models/video');
 const fs = require('fs');
 const path = require('path');
 const serverUrl = process.env.SERVER_URL;

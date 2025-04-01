@@ -1,18 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const videoController = require('../controllers/video.controller');
-const authMiddleware = require('../middleware/auth.middleware');
+const upload = require('../middleware/upload.middleware');
+const { getAllVideos, getUserVideos, uploadVideo, deleteVideo } = require('../controllers/video.controller');
+const { authMiddleware } = require("../middleware/auth.middleware");
 
 // Получение всех видео
-router.get('/', videoController.getAllVideos);
+router.get('/', getAllVideos);
 
 // Получение видео определенного пользователя
-router.get('/channel/:userId', videoController.getUserVideos);
+router.get('/channel/:userId', getUserVideos);
 
 // Загрузка видео
-router.post('/upload', authMiddleware, videoController.uploadVideo);
+router.post('/upload',upload.single('file'), authMiddleware, uploadVideo);
 
 // Удаление видео
-router.delete('/delete/:videoId', authMiddleware, videoController.deleteVideo);
+router.delete('/delete/:videoId', authMiddleware, deleteVideo);
 
 module.exports = router;

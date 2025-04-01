@@ -1,7 +1,6 @@
 const express = require("express");
 const { subscribe, unsubscribe, getSubscriptions, isSubscribed } = require("../controllers/subscription.controller");
-const { authMiddleware } = require("../middlewares/auth.middleware");
-
+const { authMiddleware } = require("../middleware/auth.middleware");
 const router = express.Router();
 
 router.post("/subscribe/:channelId", authMiddleware, subscribe);

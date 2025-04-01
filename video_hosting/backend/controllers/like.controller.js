@@ -1,6 +1,5 @@
 const Like = require('../models/like');
 const Video = require('../models/video');
-const { authMiddleware } = require('../middlewares/auth.middleware');
 
 exports.likeVideo = async (req, res) => {
     try {

@@ -1,6 +1,5 @@
 const Comment = require('../models/comment');
 const Video = require('../models/video');
-const { authMiddleware } = require('../middlewares/auth.middleware');
 
 exports.addComment = async (req, res) => {
     try {
