@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Exchange Rates</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <div class="container mt-5">
+    <h2 class="mb-4">Exchange Rates</h2>
+    <div class="row">
+      <div class="col-md-8">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Buy Rate</th>
+              <th>Sell Rate</th>
+              <th>Updated At</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ratesTable">
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-md-4">
+        <h4>Add New Rate</h4>
+        <form id="addRateForm">
+          <div class="mb-3">
+            <label for="addCode" class="form-label">Currency Code</label>
+            <input type="text" class="form-control" id="addCode" required>
+          </div>
+          <div class="mb-3">
+            <label for="addBuyRate" class="form-label">Buy Rate</label>
+            <input type="number" class="form-control" id="addBuyRate" step="0.0001" required>
+          </div>
+          <div class="mb-3">
+            <label for="addSellRate" class="form-label">Sell Rate</label>
+            <input type="number" class="form-control" id="addSellRate" step="0.0001" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Rate</button>
+        </form>
+
+        <h4 class="mt-4">Edit Rate</h4>
+        <form id="editRateForm" style="display: none;">
+          <input type="hidden" id="editCode">
+          <div class="mb-3">
+            <label for="editBuyRate" class="form-label">Buy Rate</label>
+            <input type="number" class="form-control" id="editBuyRate" step="0.0001" required>
+          </div>
+          <div class="mb-3">
+            <label for="editSellRate" class="form-label">Sell Rate</label>
+            <input type="number" class="form-control" id="editSellRate" step="0.0001" required>
+          </div>
+          <button type="submit" class="btn btn-success">Update Rate</button>
+          <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Cancel</button>
+        </form>
+
+        <button id="saveDailyRatesBtn" class="btn btn-info mt-4" onclick="saveDailyRates()">Save Today's Rates</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function loadRates() {
+      axios.get('/api/get_rates')
+        .then(response => {
+          const rates = response.data.rates;
+          const tableBody = document.getElementById('ratesTable');
+          tableBody.innerHTML = '';
+
+          rates.forEach(rate => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                            <td>${rate.exchange_rates_code}</td>
+                            <td>${rate.buy_rate.toFixed(4)}</td>
+                            <td>${rate.sell_rate.toFixed(4)}</td>
+                            <td>${new Date(rate.updated_at).toLocaleString()}</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" onclick="editRate('${rate.exchange_rates_code}', ${rate.buy_rate}, ${rate.sell_rate})">Edit</button>
+                            </td>
+                        `;
+            tableBody.appendChild(row);
+          });
+        })
+        .catch(error => console.error('Error loading rates:', error));
+    }
+
+    document.getElementById('addRateForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      const data = {
+        exchange_rates_code: document.getElementById('addCode').value.toUpperCase(),
+        buy_rate: parseFloat(document.getElementById('addBuyRate').value),
+        sell_rate: parseFloat(document.getElementById('addSellRate').value),
+      };
+
+      axios.post('/api/add_rate', data)
+        .then(() => {
+          loadRates();
+          this.reset();
+        })
+        .catch(error => console.error('Error adding rate:', error));
+    });
+
+    function editRate(code, buyRate, sellRate) {
+      document.getElementById('editCode').value = code;
+      document.getElementById('editBuyRate').value = buyRate;
+      document.getElementById('editSellRate').value = sellRate;
+      document.getElementById('editRateForm').style.display = 'block';
+    }
+
+    document.getElementById('editRateForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      const data = {
+        exchange_rates_code: document.getElementById('editCode').value,
+        buy_rate: parseFloat(document.getElementById('editBuyRate').value),
+        sell_rate: parseFloat(document.getElementById('editSellRate').value),
+      };
+
+      axios.put('/api/update_rate', data)
+        .then(() => {
+          loadRates();
+          cancelEdit();
+        })
+        .catch(error => console.error('Error updating rate:', error));
+    });
+
+    function cancelEdit() {
+      document.getElementById('editRateForm').style.display = 'none';
+    }
+
+    function saveDailyRates() {
+      axios.post('/api/save_daily_rates')
+        .then(() => {
+          window.location.href = '/history';
+        })
+        .catch(error => console.error('Error saving daily rates:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', loadRates);
+  </script>
+
+</body>
+
+</html>

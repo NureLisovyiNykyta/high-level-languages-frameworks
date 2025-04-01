@@ -1,0 +1,2 @@
+from models.exchange_rates_model import ExchangeRate
+from models.exchange_rates_history_model import ExchangeRateHistory
