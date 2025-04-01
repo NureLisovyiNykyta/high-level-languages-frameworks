@@ -27,8 +27,7 @@ class ExchangeRateHistory(db.Model):
             rate_list = ExchangeRateHistory.query.filter_by(date=date).all()
 
             if not rate_list:
-                return {"message": "No exchange rates found for this date", "date": str(date)}
-
+                return {"message": "No exchange rates found for this date", "date": str(date)}, 404
             history_rate_list = [
                 {
                     "rate_id": rate.rate_id,
