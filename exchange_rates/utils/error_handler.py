@@ -9,7 +9,7 @@ class ErrorHandler:
                 "error": error.name,
                 "message": message + error.description
             })
-            response.status_code = status_code + error.code
+            response.status_code = error.code if status_code is None else status_code + error.code
         else:
             response = jsonify({
                 "error": "Internal Server Error",
