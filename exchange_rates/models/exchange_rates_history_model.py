@@ -75,6 +75,6 @@ class ExchangeRateHistory(db.Model):
             db.session.rollback()
             return ErrorHandler.handle_error(
                 e,
-                message="Database error while saving daly exchange rates history",
+                message="Database error while saving daily exchange rates history",
                 status_code=500
             )
