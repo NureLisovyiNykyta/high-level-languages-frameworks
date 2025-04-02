@@ -23,7 +23,7 @@ exports.addComment = async (req, res) => {
 
     } catch (error) {
         console.error('Error adding comment:', error);
-        res.status(500).json({ message: 'Internal server error' + error });
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 
