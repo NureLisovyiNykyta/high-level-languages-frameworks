@@ -73,3 +73,21 @@ exports.getProfile = async (req, res) => {
         res.status(500).json({ message: "Server error." });
     }
 };
+
+exports.getAllProfile = async (req, res) => {
+    try {
+        const users = await User.findAll({
+            attributes: ["id", "username", "email", "avatar_url", "created_at"]
+        });
+
+        if (!users) {
+            return res.status(404).json({ message: "Users not found." });
+        }
+
+        res.json(users);
+
+    } catch (error) {
+        console.error("Get users error:", error);
+        res.status(500).json({ message: "Server error." });
+    }
+};

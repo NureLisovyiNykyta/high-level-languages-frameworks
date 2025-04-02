@@ -15,6 +15,7 @@ exports.addComment = async (req, res) => {
         if (!content || content.trim() === '') {
             return res.status(400).json({ message: 'Comment content cannot be empty' });
         }
+        
 
         const comment = await Comment.create({ user_id: userId, video_id: videoId, content });
 
@@ -22,7 +23,7 @@ exports.addComment = async (req, res) => {
 
     } catch (error) {
         console.error('Error adding comment:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'Internal server error' + error });
     }
 };
 
@@ -37,7 +38,7 @@ exports.getCommentsByVideo = async (req, res) => {
 
         const comments = await Comment.findAll({
             where: { video_id: videoId },
-            include: [{ model: require('../models/user'), attributes: ['id', 'name'] }],
+            include: [{ model: require('../models/user'), attributes: ['id', 'username'] }],
             order: [['created_at', 'DESC']],
         });
 

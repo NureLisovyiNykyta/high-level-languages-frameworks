@@ -43,11 +43,18 @@ exports.getSubscriptions = async (req, res) => {
         const userId = req.user.id;
         const subscriptions = await Subscription.findAll({
             where: { subscriber_id: userId },
-            include: { model: User, as: "channel" },
+            include: [
+                {
+                    model: User,
+                    as: "Channel",
+                    attributes: ["id", "username", "email"],
+                },
+            ],
         });
         res.status(200).json(subscriptions);
     } catch (error) {
-        res.status(500).json({ message: "Internal server error." });
+        console.error(error);
+        res.status(500).json({ message: "Internal server error.", error });
     }
 };
 

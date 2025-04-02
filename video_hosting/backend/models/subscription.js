@@ -25,7 +25,7 @@ Subscription.init(
   }
 );
 
-Subscription.belongsTo(User, { foreignKey: 'subscriber_id' });
-Subscription.belongsTo(User, { foreignKey: 'channel_id' });
+Subscription.belongsTo(User, { foreignKey: 'subscriber_id', as: 'Subscriber' });
+Subscription.belongsTo(User, { foreignKey: 'channel_id', as: 'Channel' });
 
 module.exports = Subscription;
