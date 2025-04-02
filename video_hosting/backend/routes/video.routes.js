@@ -11,8 +11,7 @@ router.get('/', getAllVideos);
 router.get('/channel/:userId', getUserVideos);
 
 // Загрузка видео
-router.post('/upload',upload.single('file'), authMiddleware, uploadVideo);
-
+router.post('/upload', authMiddleware, upload.single('file'), uploadVideo);
 // Удаление видео
 router.delete('/delete/:videoId', authMiddleware, deleteVideo);
 
